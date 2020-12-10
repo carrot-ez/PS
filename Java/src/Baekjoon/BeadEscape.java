@@ -10,10 +10,12 @@ import java.util.Queue;
  * Note
  * dx, dy를 이용하여 네 방향 이동 구현
  * 4차원 배열 visited
+ * 빨간구슬과 파란구슬이 동시에 빠지는 경우 생각 안했음
  */
 public class BeadEscape {
     private static int rows;
     private static int cols;
+    private static int[] posHall;
     private static char[][] matrix;
     private static final int[] dx = {1, -1, 0, 0};
     private static final int[] dy = {0, 0, 1, -1};
@@ -30,7 +32,7 @@ public class BeadEscape {
         matrix = new char[rows][cols];
         int[] posRed = new int[2];
         int[] posBlue = new int[2];
-        int[] posHall = new int[2];
+        posHall = new int[2];
         for(int i=0; i<rows; i++) {
             String s = br.readLine();
             for(int k=0; k<cols; k++) {
@@ -54,7 +56,7 @@ public class BeadEscape {
         }
 
         // bfs
-        visited = new boolean[rows][cols][rows][cols];
+        visited = new boolean[10][10][10][10];
         visited[posRed[0]][posRed[1]][posBlue[0]][posBlue[1]] = true;
         Queue<Pair> queue = new LinkedList<>();
         queue.add(new Pair(posRed, posBlue, 0));
@@ -64,28 +66,32 @@ public class BeadEscape {
 
             // 10번 초과했는지 확인
             if(p.cnt > 10) {
-                System.out.println("-1");
                 break;
             }
 
             // Hall에 들어왔는지 확인
-            if(p.blues[0] == posHall[0] && p.blues[1] == posHall[1]) {
-                continue;
-            }
-            else if(p.reds[0] == posHall[0] && p.reds[1] == posHall[1]) {
+            if(p.reds[0] == posHall[0] && p.reds[1] == posHall[1]) {
                 System.out.println(p.cnt);
+                System.exit(0);
                 break;
             }
 
             // 4방향으로 굴리면서 방문하지 않은 곳이면 queue에 추가
             for(int i=0; i<4; i++) {
                 Pair moved = move(p, dx[i], dy[i]);
+
+                // 파란공이 구멍에 빠진 경우
+                if(moved == null) {
+                    continue;
+                }
+
                 if(!visited[moved.reds[0]][moved.reds[1]][moved.blues[0]][moved.blues[1]]) {
                     visited[moved.reds[0]][moved.reds[1]][moved.blues[0]][moved.blues[1]] = true;
                     queue.add(moved);
                 }
             }
         }
+        System.out.println("-1");
 
     }
 
@@ -110,6 +116,11 @@ public class BeadEscape {
             blue[0] += dx;
             blue[1] += dy;
             blueCount += 1;
+        }
+
+        // 파란공이 구멍에 들어가면 실패
+        if(blue[0] == posHall[0] && blue[1] == posHall[1]) {
+            return null;
         }
 
         // 좌표가 같은지 확인
