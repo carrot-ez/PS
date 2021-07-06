@@ -1,4 +1,3 @@
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -29,18 +28,18 @@ public class 게임맵최단거리 {
 
         // Character
         int[][] dist = new int[ROW_NUM][COL_NUM];
-        Character init = new Character(0, 0);
+        Point init = new Point(0, 0);
         dist[0][0] = 1;
 
         // set init value
-        Queue<Character> queue = new LinkedList<>();
+        Queue<Point> queue = new LinkedList<>();
         queue.offer(init);
 
         // start bfs
         while(!queue.isEmpty()) {
-            Character character = queue.poll();
-            final int cx = character.x;
-            final int cy = character.y;
+            Point point = queue.poll();
+            final int cx = point.x;
+            final int cy = point.y;
 
             // calc next position
             for(int i=0; i<4; i++) {
@@ -52,7 +51,7 @@ public class 게임맵최단거리 {
                     continue;
 
                 if(dist[nextX][nextY] == 0 || dist[nextX][nextY] > (dist[cx][cy] + 1)) {
-                    Character nextPos = new Character(nextX, nextY);
+                    Point nextPos = new Point(nextX, nextY);
                     dist[nextX][nextY] = dist[cx][cy] + 1;
                     queue.offer(nextPos);
                 }
@@ -79,16 +78,16 @@ public class 게임맵최단거리 {
         return false;
     }
 
-    private class Character {
+    private class Point {
         int x;
         int y;
 
-        public Character(int x, int y) {
+        public Point(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
-        public boolean isSamePosition(Character c) {
+        public boolean isSamePosition(Point c) {
             return this.x == c.x && this.y == c.y;
         }
 
@@ -96,10 +95,10 @@ public class 게임맵최단거리 {
         public boolean equals(Object obj) {
             if (obj == this)
                 return true;
-            if(!(obj instanceof Character))
+            if(!(obj instanceof Point))
                 return false;
 
-            Character c = (Character) obj;
+            Point c = (Point) obj;
 
             return c.x == this.x && c.y == this.y;
         }
