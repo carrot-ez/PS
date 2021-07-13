@@ -13,6 +13,9 @@ public class 양치기_꿍 {
     private final static char WOLF = 'v';
     private final static char SHEEP = 'k';
 
+    private final static int[] D_ROW = {1, -1, 0, 0};
+    private final static int[] D_COL = {0, 0, 1, -1};
+
 
     public static void main(String[] args) throws IOException {
 
@@ -84,40 +87,17 @@ public class 양치기_꿍 {
                     }
 
                     // 주위의 유효한 위치를 찾아 삽입
-                    // up
-                    if (checkBound(r - 1, c, row, col)
-                            && map[r-1][c] != FENCE
-                            && !visited[r - 1][c]
-                    ) {
-                        queue.offer(new int[]{r - 1, c});
-                        visited[r-1][c] = true;
-                    }
+                    for(int m = 0; m < 4; m++) {
+                        int mRow = r + D_ROW[m];
+                        int mCol = c + D_COL[m];
 
-                    // down
-                    if (checkBound(r + 1, c, row, col)
-                            && map[r + 1][c] != FENCE
-                            && !visited[r + 1][c]
-                    ) {
-                        queue.offer(new int[]{r + 1, c});
-                        visited[r + 1][c] = true;
-                    }
-
-                    // left
-                    if (checkBound(r, c - 1, row, col)
-                            && map[r][c - 1] != FENCE
-                            && !visited[r][c - 1]
-                    ) {
-                        queue.offer(new int[]{r, c - 1});
-                        visited[r][c - 1] = true;
-                    }
-
-                    // right
-                    if (checkBound(r, c + 1, row, col)
-                            && map[r][c + 1] != FENCE
-                            && !visited[r][c + 1]
-                    ) {
-                        queue.offer(new int[]{r, c + 1});
-                        visited[r][c + 1] = true;
+                        if (checkBound(mRow, mCol, row, col)
+                                && map[mRow][mCol] != FENCE
+                                && !visited[mRow][mCol]
+                        ) {
+                            queue.offer(new int[]{mRow, mCol});
+                            visited[mRow][mCol] = true;
+                        }
                     }
                 } // while
 
