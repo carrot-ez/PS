@@ -22,9 +22,7 @@ public class 카카오프렌즈_컬러링북 {
 
         int[][] clonedPicture = new int[m][n];
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                clonedPicture[i][j] = picture[i][j];
-            }
+            System.arraycopy(picture[i], 0, clonedPicture[i], 0, n);
         }
 
         numRow = m;
