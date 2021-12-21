@@ -1,7 +1,9 @@
 package Programmers.level2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class 행렬_테두리_회전하기 {
     private int[][] board;
@@ -37,29 +39,27 @@ public class 행렬_테두리_회전하기 {
         int x2 = query[2] - 1;
         int y2 = query[3] - 1;
 
-        int next = board[x1][y1];
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.offer(board[x1][y1]);
         for (int i = y1 + 1; i <= y2; i++) {
-            int tmp = board[x1][i];
-            board[x1][i] = next;
-            next = tmp;
+            queue.offer(board[x1][i]);
+            board[x1][i] = queue.poll();
             min = Math.min(min, board[x1][i]);
         }
         for (int i = x1 + 1; i <= x2; i++) {
-            int tmp = board[i][y2];
-            board[i][y2] = next;
-            next = tmp;
+            queue.offer(board[i][y2]);
+            board[i][y2] = queue.poll();
             min = Math.min(min, board[i][y2]);
         }
         for (int i = y2 - 1; i >= y1; i--) {
-            int tmp = board[x2][i];
-            board[x2][i] = next;
-            next = tmp;
+            queue.offer(board[x2][i]);
+            board[x2][i] = queue.poll();
             min = Math.min(min, board[x2][i]);
         }
         for (int i = x2 - 1; i >= x1; i--) {
-            int tmp = board[i][y1];
-            board[i][y1] = next;
-            next = tmp;
+            queue.offer(board[i][y1]);
+            board[i][y1] = queue.poll();
             min = Math.min(min, board[i][y1]);
         }
 
